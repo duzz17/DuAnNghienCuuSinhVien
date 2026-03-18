@@ -8,7 +8,7 @@ function TopicPage() {
   const [content, setContent] = useState("");
 
   const loadComments = () => {
-    fetch("http://localhost:5000/api/comments/" + id)
+    fetch("https://duannghiencuusinhvien.onrender.com/api/comments/" + id)
       .then((res) => res.json())
       .then((data) => setComments(data));
   };
@@ -18,7 +18,7 @@ function TopicPage() {
   }, [id]);
 
   const createComment = async (parent_id = null) => {
-    await fetch("http://localhost:5000/api/comments", {
+    await fetch("https://duannghiencuusinhvien.onrender.com/api/comments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

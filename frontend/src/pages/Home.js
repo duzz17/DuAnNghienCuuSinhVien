@@ -11,7 +11,7 @@ function Home() {
 
   // ===== LOAD DATA =====
   const loadTopics = () => {
-    fetch("http://localhost:5000/api/topics")
+    fetch("https://duannghiencuusinhvien.onrender.com/api/topics")
       .then((res) => res.json())
       .then((data) => setTopics(data));
   };
@@ -22,7 +22,7 @@ function Home() {
 
   // ===== CREATE =====
   const createTopic = async () => {
-    await fetch("http://localhost:5000/api/topics", {
+    await fetch("https://duannghiencuusinhvien.onrender.com/api/topics", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,20 +37,23 @@ function Home() {
 
   // ===== VOTE =====
   const vote = async (id, type) => {
-    await fetch("http://localhost:5000/api/topics/" + id + "/vote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    await fetch(
+      "https://duannghiencuusinhvien.onrender.com/api/topics/" + id + "/vote",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type }),
       },
-      body: JSON.stringify({ type }),
-    });
+    );
 
     loadTopics();
   };
 
   // ===== DELETE =====
   const deleteTopic = async (id) => {
-    await fetch("http://localhost:5000/api/topics/" + id, {
+    await fetch("https://duannghiencuusinhvien.onrender.com/api/topics/" + id, {
       method: "DELETE",
     });
 
