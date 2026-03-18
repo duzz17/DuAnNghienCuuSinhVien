@@ -1,11 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import TopicPage from "./pages/TopicPage";
 import "./App.css";
 import { useState, useEffect } from "react";
 import NewsDetail from "./pages/NewsDetail";
 
-<Route path="/news/:id" element={<NewsDetail />} />;
 function App() {
   // 🔥 DANH SÁCH ẢNH
   const images = ["/banner1.jpg", "/banner2.jpg", "/banner3.jpg"];
@@ -33,7 +32,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div>
         {/* TOPBAR */}
         <div className="topbar">
@@ -125,7 +124,7 @@ function App() {
           <Route path="/topic/:id" element={<TopicPage />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
