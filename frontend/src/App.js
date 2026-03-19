@@ -72,7 +72,7 @@ function App() {
             </div>
 
             <div className="menu-item">
-              CHỨC NĂNG NCKH
+              HƯỚNG DẪN NCKH
               <div className="dropdown">
                 <div>Quy trình</div>
                 <div>Cách chọn đề tài</div>
