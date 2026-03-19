@@ -316,3 +316,8 @@
 .news-small:hover {
   transform: translateY(-5px);
 }
+.logo img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}

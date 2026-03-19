@@ -71,7 +71,7 @@ function Home() {
             className="news-big"
             onClick={() => window.open("/news/1", "_blank")}
           >
-            <img src="/anh1.png" />
+            <img src={process.env.PUBLIC_URL + "/anh1.png"} />
             <div className="news-title">
               NGHIÊN CỨU KHOA HỌC SINH VIÊN – KHOA QUẢN TRỊ NHÂN LỰC
             </div>
@@ -81,7 +81,7 @@ function Home() {
             className="news-small"
             onClick={() => window.open("/news/1", "_blank")}
           >
-            <img src="/anh2.png" />
+            <img src={process.env.PUBLIC_URL + "/anh2.png"} />
             <p>BẢO VỆ ĐỀ TÀI NGHIÊN CỨU KHOA HỌC</p>
           </div>
 
@@ -89,7 +89,7 @@ function Home() {
             className="news-small"
             onClick={() => window.open("/news/1", "_blank")}
           >
-            <img src="/anh3.png" />
+            <img src={process.env.PUBLIC_URL + "/anh3.png"} />
             <p>NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHÔNG CHỈ LÀ MỘT BUỔI BẢO VỆ </p>
           </div>
 
@@ -97,7 +97,7 @@ function Home() {
             className="news-small"
             onClick={() => window.open("/news/1", "_blank")}
           >
-            <img src="/anh4.png" />
+            <img src={process.env.PUBLIC_URL + "/anh4.png"} />
             <p>
               NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHẲNG ĐỊNH TRI THỨC, CHẮP CÁNH TƯ
               DUY KINH TẾ TRẺ

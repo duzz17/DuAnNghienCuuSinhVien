@@ -1,48 +1,27 @@
-const express = require("express");
-const cors = require("cors");
+// IMPORT
+const { Pool } = require("pg");
 
-const topicRoutes = require("./routes/topics");
-const commentRoutes = require("./routes/comments");
+// DEBUG (để chắc chắn file chạy đúng)
+console.log("🔌 Initializing PostgreSQL connection...");
 
-const pool = require("./db"); // 👈 THÊM DÒNG NÀY
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-// 👇 THÊM ĐOẠN NÀY
-async function createTables() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS topics (
-      id SERIAL PRIMARY KEY,
-      title TEXT,
-      content TEXT,
-      votes INT DEFAULT 0
-    );
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS comments (
-      id SERIAL PRIMARY KEY,
-      topic_id INT,
-      parent_id INT,
-      content TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-
-  console.log("✅ Tables created");
-}
-
-createTables();
-// 👆 KẾT THÚC
-
-app.use("/api/topics", topicRoutes);
-app.use("/api/comments", commentRoutes);
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+// CREATE POOL
+const pool = new Pool({
+  user: "postgres", // 👈 user mặc định
+  host: "localhost", // 👈 local DB
+  database: "research_platform", // 👈 tên database
+  password: "123456", // 👈 🔥 BẮT BUỘC: phải là STRING
+  port: 5432,
+  ssl: false, // 👈 tắt SSL (local)
 });
+
+// TEST CONNECTION (rất quan trọng)
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("❌ Database connection error:", err.message);
+  } else {
+    console.log("✅ Connected to PostgreSQL");
+    release();
+  }
+});
+
+module.exports = pool;

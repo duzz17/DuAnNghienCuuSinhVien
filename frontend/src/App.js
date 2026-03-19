@@ -7,7 +7,11 @@ import NewsDetail from "./pages/NewsDetail";
 
 function App() {
   // 🔥 DANH SÁCH ẢNH
-  const images = ["/banner1.jpg", "/banner2.jpg", "/banner3.jpg"];
+  const images = [
+    process.env.PUBLIC_URL + "/banner1.png",
+    process.env.PUBLIC_URL + "/banner2.png",
+    process.env.PUBLIC_URL + "/banner3.png",
+  ];
 
   // 🔥 STATE
   const [index, setIndex] = useState(0);
@@ -36,13 +40,15 @@ function App() {
       <div>
         {/* TOPBAR */}
         <div className="topbar">
-          <div>HỌC VIỆN HC VÀ QTC</div>
+          <div>Học viện Hành chính và Quản trị công</div>
           <div className="lang">Tiếng Việt 🇻🇳</div>
         </div>
 
         {/* NAVBAR */}
         <div className="navbar">
-          <div className="logo">APAG</div>
+          <div className="logo">
+            <img src={process.env.PUBLIC_URL + "/logo.jpg"} alt="logo" />
+          </div>
 
           <div className="menu">
             <div className="menu-item">TRANG CHỦ</div>
