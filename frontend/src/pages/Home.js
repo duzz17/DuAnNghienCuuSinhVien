@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
 
@@ -159,11 +159,11 @@ function Home() {
                 {/* CONTENT */}
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <a href={"/topic/" + topic.id}>
+                    <Link to={"/topic/" + topic.id}>
                       <h3 className="font-bold text-blue-600 hover:underline">
                         {topic.title}
                       </h3>
-                    </a>
+                    </Link>
 
                     <button
                       onClick={() => deleteTopic(topic.id)}
