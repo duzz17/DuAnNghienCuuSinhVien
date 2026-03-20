@@ -354,3 +354,32 @@
 .dropdown a:hover {
   background: #f2f2f2;
 }
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 20px;
+  position: relative;
+  padding-left: 12px;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 5px;
+  height: 25px;
+  background: #2563eb;
+  border-radius: 2px;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  margin-top: 8px;
+  width: 60px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 2px;
+}

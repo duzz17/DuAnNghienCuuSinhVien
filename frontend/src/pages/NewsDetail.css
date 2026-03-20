@@ -1,0 +1,75 @@
+/* ================= NEWS DETAIL (TRANG BÀI VIẾT) ================= */
+.news-detail {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+}
+
+.news-detail-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #1e293b;
+  line-height: 1.4;
+}
+
+.news-image {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.news-content {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #334155;
+  white-space: pre-line;
+}
+
+/* ================= NEWS CARD (TRANG HOME) ================= */
+.news-big {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Ảnh */
+.news-big img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: 0.4s;
+}
+
+/* Overlay đen mờ */
+.news-big::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+}
+
+/* Tiêu đề trên ảnh */
+.news-card-title {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: bold;
+
+  z-index: 2;
+}
+
+/* Hover effect */
+.news-big:hover img {
+  transform: scale(1.05);
+}

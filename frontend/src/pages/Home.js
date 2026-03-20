@@ -64,39 +64,27 @@ function Home() {
     <div>
       {/* ================= BẢNG TIN ================= */}
       <div className="news-section">
-        <h2>BẢN TIN</h2>
+        <h2 className="section-title">BẢN TIN</h2>
 
         <div className="news-grid">
-          <div
-            className="news-big"
-            onClick={() => window.open("#/news/1", "_blank")}
-          >
+          <div className="news-big" onClick={() => navigate("/news/1")}>
             <img src={process.env.PUBLIC_URL + "/anh1.png"} />
-            <div className="news-title">
+            <div className="news-card-title">
               NGHIÊN CỨU KHOA HỌC SINH VIÊN – KHOA QUẢN TRỊ NHÂN LỰC
             </div>
           </div>
 
-          <div
-            className="news-small"
-            onClick={() => window.open("#/news/1", "_blank")}
-          >
+          <div className="news-small" onClick={() => navigate("/news/2")}>
             <img src={process.env.PUBLIC_URL + "/anh2.png"} />
             <p>BẢO VỆ ĐỀ TÀI NGHIÊN CỨU KHOA HỌC</p>
           </div>
 
-          <div
-            className="news-small"
-            onClick={() => window.open("#/news/1", "_blank")}
-          >
+          <div className="news-small" onClick={() => navigate("/news/3")}>
             <img src={process.env.PUBLIC_URL + "/anh3.png"} />
             <p>NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHÔNG CHỈ LÀ MỘT BUỔI BẢO VỆ </p>
           </div>
 
-          <div
-            className="news-small"
-            onClick={() => window.open("#/news/1", "_blank")}
-          >
+          <div className="news-small" onClick={() => navigate("/news/4")}>
             <img src={process.env.PUBLIC_URL + "/anh4.png"} />
             <p>
               NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHẲNG ĐỊNH TRI THỨC, CHẮP CÁNH TƯ
