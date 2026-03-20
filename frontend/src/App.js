@@ -4,7 +4,11 @@ import TopicPage from "./pages/TopicPage";
 import "./App.css";
 import { useState, useEffect } from "react";
 import NewsDetail from "./pages/NewsDetail";
-
+import { Link } from "react-router-dom";
+import NewsPage from "./pages/NewsPage";
+import DocumentsPage from "./pages/DocumentsPage";
+import GuidePage from "./pages/GuidePage";
+import ForumPage from "./pages/ForumPage";
 function App() {
   // 🔥 DANH SÁCH ẢNH
   const images = [
@@ -51,41 +55,48 @@ function App() {
           </div>
 
           <div className="menu">
-            <div className="menu-item">TRANG CHỦ</div>
+            {/* TRANG CHỦ */}
+            <Link to="/" className="menu-item">
+              TRANG CHỦ
+            </Link>
 
+            {/* TIN TỨC */}
             <div className="menu-item">
               TIN TỨC
               <div className="dropdown">
-                <div>Sự kiện</div>
-                <div>Hội thảo</div>
-                <div>Tọa đàm</div>
+                <Link to="/news/events">Sự kiện</Link>
+                <Link to="/news/seminars">Hội thảo</Link>
+                <Link to="/news/talks">Tọa đàm</Link>
               </div>
             </div>
 
+            {/* KHO TÀI LIỆU */}
             <div className="menu-item">
               KHO TÀI LIỆU
               <div className="dropdown">
-                <div>Bài NCKH</div>
-                <div>Luận văn</div>
-                <div>Giáo trình</div>
+                <Link to="/documents/research">Bài NCKH</Link>
+                <Link to="/documents/thesis">Luận văn</Link>
+                <Link to="/documents/books">Giáo trình</Link>
               </div>
             </div>
 
+            {/* HƯỚNG DẪN */}
             <div className="menu-item">
               HƯỚNG DẪN NCKH
               <div className="dropdown">
-                <div>Quy trình</div>
-                <div>Cách chọn đề tài</div>
-                <div>Cách viết</div>
+                <Link to="/guide/process">Quy trình</Link>
+                <Link to="/guide/topic">Cách chọn đề tài</Link>
+                <Link to="/guide/writing">Cách viết</Link>
               </div>
             </div>
 
+            {/* DIỄN ĐÀN */}
             <div className="menu-item">
               DIỄN ĐÀN TRAO ĐỔI
               <div className="dropdown">
-                <div>Đặt câu hỏi</div>
-                <div>Thảo luận</div>
-                <div>Góp ý</div>
+                <Link to="/forum/questions">Đặt câu hỏi</Link>
+                <Link to="/forum/discussion">Thảo luận</Link>
+                <Link to="/forum/feedback">Góp ý</Link>
               </div>
             </div>
           </div>
@@ -128,6 +139,20 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/topic/:id" element={<TopicPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/documents" element={<DocumentsPage />} />
+          <Route path="/guide" element={<GuidePage />} />
+          <Route path="/news/events" element={<NewsPage />} />
+          <Route path="/news/seminars" element={<NewsPage />} />
+          <Route path="/news/talks" element={<NewsPage />} />
+
+          <Route path="/documents/research" element={<DocumentsPage />} />
+          <Route path="/documents/thesis" element={<DocumentsPage />} />
+          <Route path="/documents/books" element={<DocumentsPage />} />
+
+          <Route path="/guide/process" element={<GuidePage />} />
+          <Route path="/guide/topic" element={<GuidePage />} />
+          <Route path="/guide/writing" element={<GuidePage />} />
         </Routes>
       </div>
     </HashRouter>

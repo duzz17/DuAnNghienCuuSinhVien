@@ -1,0 +1,60 @@
+.doc-container {
+  padding: 40px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.doc-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #1e293b;
+}
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.doc-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.doc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.doc-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.doc-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 15px;
+}
+
+.doc-btn {
+  text-decoration: none;
+  background: #2563eb;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.doc-btn:hover {
+  background: #1e40af;
+}
