@@ -69,7 +69,7 @@ function Home() {
         <div className="news-grid">
           <div
             className="news-big"
-            onClick={() => window.open("/news/1", "_blank")}
+            onClick={() => window.open("#/news/1", "_blank")}
           >
             <img src={process.env.PUBLIC_URL + "/anh1.png"} />
             <div className="news-title">
@@ -79,7 +79,7 @@ function Home() {
 
           <div
             className="news-small"
-            onClick={() => window.open("/news/1", "_blank")}
+            onClick={() => window.open("#/news/1", "_blank")}
           >
             <img src={process.env.PUBLIC_URL + "/anh2.png"} />
             <p>BẢO VỆ ĐỀ TÀI NGHIÊN CỨU KHOA HỌC</p>
@@ -87,7 +87,7 @@ function Home() {
 
           <div
             className="news-small"
-            onClick={() => window.open("/news/1", "_blank")}
+            onClick={() => window.open("#/news/1", "_blank")}
           >
             <img src={process.env.PUBLIC_URL + "/anh3.png"} />
             <p>NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHÔNG CHỈ LÀ MỘT BUỔI BẢO VỆ </p>
@@ -95,7 +95,7 @@ function Home() {
 
           <div
             className="news-small"
-            onClick={() => window.open("/news/1", "_blank")}
+            onClick={() => window.open("#/news/1", "_blank")}
           >
             <img src={process.env.PUBLIC_URL + "/anh4.png"} />
             <p>
