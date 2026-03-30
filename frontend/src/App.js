@@ -9,6 +9,8 @@ import NewsPage from "./pages/NewsPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import GuidePage from "./pages/GuidePage";
 import ForumPage from "./pages/ForumPage";
+import filesData from "./data/filesData"; //
+import Navbar from "./components/Navbar";
 function App() {
   // 🔥 DANH SÁCH ẢNH
   const images = [
@@ -16,8 +18,8 @@ function App() {
     process.env.PUBLIC_URL + "/banner2.png",
     process.env.PUBLIC_URL + "/banner3.png",
   ];
-
   // 🔥 STATE
+
   const [index, setIndex] = useState(0);
 
   // 🔥 AUTO SLIDE (3 giây)
@@ -49,60 +51,7 @@ function App() {
         </div>
 
         {/* NAVBAR */}
-        <div className="navbar">
-          <div className="logo">
-            <img src={process.env.PUBLIC_URL + "/logo.jpg"} alt="logo" />
-          </div>
-
-          <div className="menu">
-            {/* TRANG CHỦ */}
-            <Link to="/" className="menu-item">
-              TRANG CHỦ
-            </Link>
-
-            {/* TIN TỨC */}
-            <div className="menu-item">
-              TIN TỨC
-              <div className="dropdown">
-                <Link to="/news/events">Sự kiện</Link>
-                <Link to="/news/seminars">Hội thảo</Link>
-                <Link to="/news/talks">Tọa đàm</Link>
-              </div>
-            </div>
-
-            {/* KHO TÀI LIỆU */}
-            <div className="menu-item">
-              KHO TÀI LIỆU
-              <div className="dropdown">
-                <Link to="/documents/research">Bài NCKH</Link>
-                <Link to="/documents/thesis">Luận văn</Link>
-                <Link to="/documents/books">Giáo trình</Link>
-              </div>
-            </div>
-
-            {/* HƯỚNG DẪN */}
-            <div className="menu-item">
-              HƯỚNG DẪN NCKH
-              <div className="dropdown">
-                <Link to="/guide/process">Quy trình</Link>
-                <Link to="/guide/topic">Cách chọn đề tài</Link>
-                <Link to="/guide/writing">Cách viết</Link>
-              </div>
-            </div>
-
-            {/* DIỄN ĐÀN */}
-            <div className="menu-item">
-              DIỄN ĐÀN TRAO ĐỔI
-              <div className="dropdown">
-                <Link to="/forum/questions">Đặt câu hỏi</Link>
-                <Link to="/forum/discussion">Thảo luận</Link>
-                <Link to="/forum/feedback">Góp ý</Link>
-              </div>
-            </div>
-          </div>
-
-          <input className="search" placeholder="🔍 Tìm kiếm..." />
-        </div>
+        <Navbar />
 
         {/* 🎯 BANNER SLIDER */}
         <div className="banner">
