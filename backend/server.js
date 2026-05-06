@@ -58,9 +58,9 @@
 // module.exports = pool;
 const express = require("express");
 const pool = require("./db");
-
+const cors = require("cors");
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 app.post("/posts", async (req, res) => {
