@@ -11,18 +11,14 @@ function Home() {
 
   // ===== LOAD DATA =====
   const loadTopics = () => {
-    fetch("https://duannghiencuusinhvien.onrender.com/api/topics")
+    fetch("https://duannghiencuusinhvien.onrender.com/posts")
       .then((res) => res.json())
       .then((data) => setTopics(data));
   };
 
-  useEffect(() => {
-    loadTopics();
-  }, []);
-
   // ===== CREATE =====
   const createTopic = async () => {
-    await fetch("https://duannghiencuusinhvien.onrender.com/api/topics", {
+    await fetch("https://duannghiencuusinhvien.onrender.com/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
