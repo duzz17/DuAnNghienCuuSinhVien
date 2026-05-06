@@ -63,6 +63,25 @@ const app = express();
 
 app.use(express.json());
 
+app.post("/posts", async (req, res) => {
+  const { title, content } = req.body;
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO posts (title, content) VALUES ($1, $2) RETURNING *",
+      [title, content],
+    );
+
+    res.json({
+      message: "Created",
+      post: result.rows[0],
+    });
+  } catch (err) {
+    console.error("❌ Insert error:", err.message);
+    res.status(500).json({ error: "Failed to create post" });
+  }
+});
+
 // test API
 app.get("/", (req, res) => {
   res.send("Server OK");
