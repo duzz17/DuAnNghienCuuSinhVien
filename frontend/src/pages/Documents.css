@@ -53,8 +53,22 @@
   text-align: center;
   border-radius: 8px;
   transition: 0.3s;
+  flex: 1;
 }
 
 .doc-btn:hover {
   background: #1e40af;
+}
+
+.doc-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.doc-preview-btn {
+  background: #0f766e;
+}
+
+.doc-preview-btn:hover {
+  background: #115e59;
 }

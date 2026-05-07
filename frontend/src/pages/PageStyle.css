@@ -38,8 +38,28 @@
   color: white;
   border-radius: 6px;
   text-decoration: none;
+  text-align: center;
+  flex: 1;
 }
 
 .btn:hover {
   background: #1e40af;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card-actions .btn {
+  margin-top: 0;
+}
+
+.preview-btn {
+  background: #0f766e;
+}
+
+.preview-btn:hover {
+  background: #115e59;
 }

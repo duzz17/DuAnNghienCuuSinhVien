@@ -87,9 +87,20 @@ function NewsPage() {
             <h3>{item.title}</h3>
 
             {/* 🔥 NÚT TẢI */}
-            <a href={item.file} download className="btn">
+            <div className="card-actions">
+              <a
+                href={item.file}
+                target="_blank"
+                rel="noreferrer"
+                className="btn preview-btn"
+              >
+                Xem truoc
+              </a>
+
+              <a href={item.file} download className="btn">
               ⬇ Tải tài liệu
-            </a>
+              </a>
+            </div>
           </div>
         ))}
       </div>

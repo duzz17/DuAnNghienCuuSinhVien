@@ -119,9 +119,20 @@ function GuidePage() {
 
             <p>{file.name}</p>
 
-            <a href={file.url} download className="btn">
+            <div className="card-actions">
+              <a
+                href={file.url}
+                target="_blank"
+                rel="noreferrer"
+                className="btn preview-btn"
+              >
+                Xem truoc
+              </a>
+
+              <a href={file.url} download className="btn">
               ⬇ Tải tài liệu
-            </a>
+              </a>
+            </div>
           </div>
         ))}
       </div>

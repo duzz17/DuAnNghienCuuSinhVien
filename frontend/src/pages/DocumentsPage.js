@@ -115,9 +115,20 @@ function DocumentsPage() {
               <p className="doc-name">{file.name}</p>
             </div>
 
-            <a href={file.url} download className="doc-btn">
+            <div className="doc-actions">
+              <a
+                href={file.url}
+                target="_blank"
+                rel="noreferrer"
+                className="doc-btn doc-preview-btn"
+              >
+                Xem truoc
+              </a>
+
+              <a href={file.url} download className="doc-btn">
               ⬇ Tải xuống
-            </a>
+              </a>
+            </div>
           </div>
         ))}
       </div>
