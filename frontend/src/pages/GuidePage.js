@@ -126,7 +126,7 @@ function GuidePage() {
                 rel="noreferrer"
                 className="btn preview-btn"
               >
-                Xem truoc
+                Xem trước
               </a>
 
               <a href={file.url} download className="btn">

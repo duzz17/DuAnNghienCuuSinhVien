@@ -30,6 +30,21 @@ async function createTables() {
       ADD COLUMN IF NOT EXISTS votes INT DEFAULT 0;
     `);
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS comments (
+        id SERIAL PRIMARY KEY,
+        topic_id INT NOT NULL,
+        parent_id INT,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+
+    await pool.query(`
+      ALTER TABLE comments
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW();
+    `);
+
     console.log("✅ Tables ready");
   } catch (err) {
     console.error("❌ Table error:", err.message);
@@ -106,9 +121,47 @@ app.post("/api/topics/:id/vote", async (req, res) => {
   }
 });
 
+// ================= COMMENTS =================
+app.get("/api/comments/:topicId", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM comments WHERE topic_id=$1 ORDER BY created_at ASC, id ASC",
+      [req.params.topicId],
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("GET comments error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/api/comments", async (req, res) => {
+  try {
+    const { topic_id, parent_id, content } = req.body;
+
+    if (!topic_id || !content) {
+      return res.status(400).json({ error: "Missing topic_id or content" });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO comments (topic_id, parent_id, content)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
+      [topic_id, parent_id || null, content],
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("CREATE comment error:", err);
+    res.status(500).json({ error: "Create comment failed" });
+  }
+});
+
 // ================= DELETE =================
 app.delete("/api/topics/:id", async (req, res) => {
   try {
+    await pool.query("DELETE FROM comments WHERE topic_id=$1", [req.params.id]);
     await pool.query("DELETE FROM posts WHERE id=$1", [req.params.id]);
 
     res.json({ success: true });

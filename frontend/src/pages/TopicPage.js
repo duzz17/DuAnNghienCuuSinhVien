@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+const BASE_URL = "https://duannghiencuusinhvien.onrender.com";
+
 function TopicPage() {
   const { id } = useParams();
 
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState("");
+  const [replyTo, setReplyTo] = useState(null);
+  const [replyContent, setReplyContent] = useState("");
 
   const loadComments = () => {
-    fetch("https://duannghiencuusinhvien.onrender.com/api/comments/" + id)
+    fetch(`${BASE_URL}/api/comments/${id}`)
       .then((res) => res.json())
-      .then((data) => setComments(data));
+      .then((data) => setComments(Array.isArray(data) ? data : []))
+      .catch((err) => console.error("Load comments error:", err));
   };
 
   useEffect(() => {
@@ -18,20 +23,44 @@ function TopicPage() {
   }, [id]);
 
   const createComment = async (parent_id = null) => {
-    await fetch("https://duannghiencuusinhvien.onrender.com/api/comments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        topic_id: id,
-        parent_id: parent_id,
-        content: content,
-      }),
-    });
+    const text = parent_id ? replyContent : content;
 
-    setContent("");
-    loadComments();
+    if (!text.trim()) {
+      alert("Vui long nhap noi dung");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic_id: id,
+          parent_id,
+          content: text,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Create comment failed");
+      }
+
+      if (parent_id) {
+        setReplyContent("");
+        setReplyTo(null);
+      } else {
+        setContent("");
+      }
+
+      loadComments();
+    } catch (err) {
+      console.error("Create comment error:", err);
+      alert(err.message);
+    }
   };
 
   const buildTree = (comments, parent_id = null) => {
@@ -56,7 +85,31 @@ function TopicPage() {
       >
         <p>{node.content}</p>
 
-        <button onClick={() => createComment(node.id)}>Reply</button>
+        {replyTo === node.id ? (
+          <div>
+            <textarea
+              placeholder="Write reply..."
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              style={{ width: "100%", minHeight: "70px" }}
+            />
+
+            <br />
+
+            <button onClick={() => createComment(node.id)}>Send reply</button>
+            <button
+              onClick={() => {
+                setReplyTo(null);
+                setReplyContent("");
+              }}
+              style={{ marginLeft: "8px" }}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button onClick={() => setReplyTo(node.id)}>Reply</button>
+        )}
 
         {renderComments(node.replies, level + 1)}
       </div>

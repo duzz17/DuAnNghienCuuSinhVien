@@ -122,7 +122,7 @@ function DocumentsPage() {
                 rel="noreferrer"
                 className="doc-btn doc-preview-btn"
               >
-                Xem truoc
+                Xem trước
               </a>
 
               <a href={file.url} download className="doc-btn">

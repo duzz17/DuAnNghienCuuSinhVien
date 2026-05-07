@@ -94,7 +94,7 @@ function NewsPage() {
                 rel="noreferrer"
                 className="btn preview-btn"
               >
-                Xem truoc
+                Xem trước
               </a>
 
               <a href={item.file} download className="btn">

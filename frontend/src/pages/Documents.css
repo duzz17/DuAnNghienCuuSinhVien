@@ -46,6 +46,7 @@
 }
 
 .doc-btn {
+  border: 0;
   text-decoration: none;
   background: #2563eb;
   color: white;
@@ -54,6 +55,8 @@
   border-radius: 8px;
   transition: 0.3s;
   flex: 1;
+  cursor: pointer;
+  font: inherit;
 }
 
 .doc-btn:hover {
