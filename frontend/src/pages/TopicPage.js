@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import "./TopicPage.css";
 
 const BASE_URL = "https://duannghiencuusinhvien.onrender.com";
 
@@ -10,6 +11,7 @@ function TopicPage() {
   const [content, setContent] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const [replyContent, setReplyContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const loadComments = () => {
     fetch(`${BASE_URL}/api/comments/${id}`)
@@ -22,15 +24,17 @@ function TopicPage() {
     loadComments();
   }, [id]);
 
-  const createComment = async (parent_id = null) => {
-    const text = parent_id ? replyContent : content;
+  const createComment = async (parentId = null) => {
+    const text = parentId ? replyContent : content;
 
     if (!text.trim()) {
-      alert("Vui long nhap noi dung");
+      alert("Vui lòng nhập nội dung");
       return;
     }
 
     try {
+      setIsSubmitting(true);
+
       const res = await fetch(`${BASE_URL}/api/comments`, {
         method: "POST",
         headers: {
@@ -38,18 +42,18 @@ function TopicPage() {
         },
         body: JSON.stringify({
           topic_id: id,
-          parent_id,
-          content: text,
+          parent_id: parentId,
+          content: text.trim(),
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Create comment failed");
+        throw new Error(data.error || "Không thể gửi bình luận");
       }
 
-      if (parent_id) {
+      if (parentId) {
         setReplyContent("");
         setReplyTo(null);
       } else {
@@ -60,80 +64,143 @@ function TopicPage() {
     } catch (err) {
       console.error("Create comment error:", err);
       alert(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const buildTree = (comments, parent_id = null) => {
-    return comments
-      .filter((c) => c.parent_id === parent_id)
-      .map((c) => ({
-        ...c,
-        replies: buildTree(comments, c.id),
+  const buildTree = (items, parentId = null) => {
+    return items
+      .filter((comment) => comment.parent_id === parentId)
+      .map((comment) => ({
+        ...comment,
+        replies: buildTree(items, comment.id),
       }));
+  };
+
+  const formatDate = (value) => {
+    if (!value) return "";
+
+    return new Date(value).toLocaleString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
   const renderComments = (nodes, level = 0) => {
     return nodes.map((node) => (
       <div
         key={node.id}
-        style={{
-          marginLeft: level * 30 + "px",
-          border: "1px solid #ccc",
-          padding: "10px",
-          marginBottom: "10px",
-        }}
+        className={`comment-thread ${level > 0 ? "comment-thread-reply" : ""}`}
       >
-        <p>{node.content}</p>
-
-        {replyTo === node.id ? (
-          <div>
-            <textarea
-              placeholder="Write reply..."
-              value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
-              style={{ width: "100%", minHeight: "70px" }}
-            />
-
-            <br />
-
-            <button onClick={() => createComment(node.id)}>Send reply</button>
-            <button
-              onClick={() => {
-                setReplyTo(null);
-                setReplyContent("");
-              }}
-              style={{ marginLeft: "8px" }}
-            >
-              Cancel
-            </button>
+        <article className="comment-card">
+          <div className="comment-avatar">
+            {node.content?.trim()?.charAt(0)?.toUpperCase() || "B"}
           </div>
-        ) : (
-          <button onClick={() => setReplyTo(node.id)}>Reply</button>
-        )}
 
-        {renderComments(node.replies, level + 1)}
+          <div className="comment-body">
+            <div className="comment-meta">
+              <strong>Người dùng</strong>
+              {node.created_at && <span>{formatDate(node.created_at)}</span>}
+            </div>
+
+            <p>{node.content}</p>
+
+            <div className="comment-actions">
+              <button type="button" onClick={() => setReplyTo(node.id)}>
+                Trả lời
+              </button>
+            </div>
+
+            {replyTo === node.id && (
+              <div className="reply-box">
+                <textarea
+                  placeholder="Nhập phản hồi của bạn..."
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
+                />
+
+                <div className="reply-actions">
+                  <button
+                    type="button"
+                    className="comment-submit"
+                    onClick={() => createComment(node.id)}
+                    disabled={isSubmitting}
+                  >
+                    Gửi trả lời
+                  </button>
+
+                  <button
+                    type="button"
+                    className="comment-cancel"
+                    onClick={() => {
+                      setReplyTo(null);
+                      setReplyContent("");
+                    }}
+                  >
+                    Hủy
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+
+        {node.replies.length > 0 && (
+          <div className="reply-list">{renderComments(node.replies, level + 1)}</div>
+        )}
       </div>
     ));
   };
+
+  const commentTree = buildTree(comments);
+
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>Comments</h2>
+    <main className="topic-page">
+      <section className="topic-panel">
+        <div className="topic-header">
+          <div>
+            <p className="topic-eyebrow">Thảo luận</p>
+            <h1>Bình luận chủ đề</h1>
+          </div>
 
-      <textarea
-        placeholder="Write comment..."
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+          <span>{comments.length} bình luận</span>
+        </div>
 
-      <br />
-      <br />
+        <div className="comment-composer">
+          <textarea
+            placeholder="Chia sẻ ý kiến của bạn..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
 
-      <button onClick={() => createComment(null)}>Comment</button>
+          <div className="composer-footer">
+            <span>Nội dung nên rõ ràng, lịch sự và đúng trọng tâm.</span>
+            <button
+              type="button"
+              className="comment-submit"
+              onClick={() => createComment(null)}
+              disabled={isSubmitting}
+            >
+              Gửi bình luận
+            </button>
+          </div>
+        </div>
 
-      <hr />
-
-      {renderComments(buildTree(comments))}
-    </div>
+        <div className="comments-list">
+          {commentTree.length > 0 ? (
+            renderComments(commentTree)
+          ) : (
+            <div className="empty-comments">
+              Chưa có bình luận nào. Hãy là người đầu tiên trao đổi về chủ đề này.
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }
 

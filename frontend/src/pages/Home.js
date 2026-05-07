@@ -43,7 +43,7 @@ function Home() {
       setContent("");
       loadTopics();
     } catch (err) {
-      console.error("❌ Create error:", err.message);
+      console.error("Create error:", err.message);
       alert(err.message);
     }
   };
@@ -86,8 +86,40 @@ function Home() {
 
         <div className="news-grid">
           <div className="news-big" onClick={() => navigate("/news/1")}>
-            <img src={process.env.PUBLIC_URL + "/anh1.png"} />
-            <div className="news-card-title">NGHIÊN CỨU KHOA HỌC SINH VIÊN</div>
+            <img
+              src={process.env.PUBLIC_URL + "/anh1.png"}
+              alt="Bản tin nghiên cứu khoa học"
+            />
+            <div className="news-card-title">
+              NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHOA QUẢN TRỊ NHÂN LỰC
+            </div>
+          </div>
+
+          <div className="news-small" onClick={() => navigate("/news/2")}>
+            <img
+              src={process.env.PUBLIC_URL + "/anh2.png"}
+              alt="Bảo vệ đề tài nghiên cứu khoa học"
+            />
+            <p>BẢO VỆ ĐỀ TÀI NGHIÊN CỨU KHOA HỌC</p>
+          </div>
+
+          <div className="news-small" onClick={() => navigate("/news/3")}>
+            <img
+              src={process.env.PUBLIC_URL + "/anh3.png"}
+              alt="Nghiên cứu khoa học sinh viên"
+            />
+            <p>NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHÔNG CHỈ LÀ MỘT BUỔI BẢO VỆ</p>
+          </div>
+
+          <div className="news-small" onClick={() => navigate("/news/4")}>
+            <img
+              src={process.env.PUBLIC_URL + "/anh4.png"}
+              alt="Khẳng định tri thức"
+            />
+            <p>
+              NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHẲNG ĐỊNH TRI THỨC, CHẮP CÁNH TƯ
+              DUY KINH TẾ TRẺ
+            </p>
           </div>
         </div>
       </div>
