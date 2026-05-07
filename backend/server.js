@@ -33,7 +33,7 @@ async function createTables() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS comments (
         id SERIAL PRIMARY KEY,
-        topic_id INT NOT NULL,
+        topic_id INT NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
         parent_id INT,
         content TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT NOW()
@@ -168,6 +168,27 @@ app.delete("/api/topics/:id", async (req, res) => {
   } catch (err) {
     console.error("DELETE error:", err);
     res.status(500).json({ error: "Delete failed" });
+  }
+});
+
+// ================= DELETE COMMENT =================
+app.delete("/api/comments/:commentId", async (req, res) => {
+  try {
+    const commentId = req.params.commentId;
+
+    const result = await pool.query(
+      "DELETE FROM comments WHERE id=$1 RETURNING *",
+      [commentId],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    res.json({ message: "Comment deleted successfully" });
+  } catch (err) {
+    console.error("DELETE comment error:", err);
+    res.status(500).json({ error: "Delete comment failed" });
   }
 });
 

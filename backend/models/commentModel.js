@@ -8,4 +8,13 @@ async function getComments(topicId) {
   return result.rows;
 }
 
-module.exports = { getComments };
+async function deleteComment(commentId) {
+  const result = await pool.query(
+    "DELETE FROM comments WHERE id=$1 RETURNING *",
+    [commentId],
+  );
+
+  return result.rows[0];
+}
+
+module.exports = { getComments, deleteComment };

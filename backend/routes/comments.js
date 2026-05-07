@@ -24,4 +24,19 @@ router.post("/", async (req, res) => {
   res.json(result.rows[0]);
 });
 
+router.delete("/:commentId", async (req, res) => {
+  const commentId = req.params.commentId;
+
+  const result = await db.query(
+    "DELETE FROM comments WHERE id=$1 RETURNING *",
+    [commentId],
+  );
+
+  if (result.rows.length === 0) {
+    return res.status(404).json({ error: "Comment not found" });
+  }
+
+  res.json({ message: "Comment deleted successfully" });
+});
+
 module.exports = router;

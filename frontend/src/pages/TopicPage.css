@@ -207,6 +207,15 @@
   text-decoration: underline;
 }
 
+.delete-btn {
+  color: #dc2626;
+  margin-left: 12px;
+}
+
+.delete-btn:hover {
+  color: #b91c1c;
+}
+
 .reply-box {
   margin-top: 12px;
 }

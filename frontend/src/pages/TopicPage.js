@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./TopicPage.css";
 
-const BASE_URL = "https://duannghiencuusinhvien.onrender.com";
+const BASE_URL = "http://localhost:3000";
 
 function TopicPage() {
   const { id } = useParams();
@@ -69,6 +69,27 @@ function TopicPage() {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    if (!window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Không thể xóa bình luận");
+      }
+
+      loadComments();
+    } catch (err) {
+      console.error("Delete comment error:", err);
+      alert(err.message);
+    }
+  };
+
   const buildTree = (items, parentId = null) => {
     return items
       .filter((comment) => comment.parent_id === parentId)
@@ -113,6 +134,13 @@ function TopicPage() {
               <button type="button" onClick={() => setReplyTo(node.id)}>
                 Trả lời
               </button>
+              <button
+                type="button"
+                className="delete-btn"
+                onClick={() => deleteComment(node.id)}
+              >
+                Xóa
+              </button>
             </div>
 
             {replyTo === node.id && (
@@ -150,7 +178,9 @@ function TopicPage() {
         </article>
 
         {node.replies.length > 0 && (
-          <div className="reply-list">{renderComments(node.replies, level + 1)}</div>
+          <div className="reply-list">
+            {renderComments(node.replies, level + 1)}
+          </div>
         )}
       </div>
     ));
@@ -195,7 +225,8 @@ function TopicPage() {
             renderComments(commentTree)
           ) : (
             <div className="empty-comments">
-              Chưa có bình luận nào. Hãy là người đầu tiên trao đổi về chủ đề này.
+              Chưa có bình luận nào. Hãy là người đầu tiên trao đổi về chủ đề
+              này.
             </div>
           )}
         </div>

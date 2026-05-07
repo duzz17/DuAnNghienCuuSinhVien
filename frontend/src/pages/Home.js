@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-const BASE_URL = "https://duannghiencuusinhvien.onrender.com";
+const BASE_URL = "http://localhost:3000";
 
 function Home() {
   const navigate = useNavigate();
