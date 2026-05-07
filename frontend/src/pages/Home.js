@@ -1,96 +1,98 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
+const BASE_URL = "https://duannghiencuusinhvien.onrender.com";
+
 function Home() {
   const navigate = useNavigate();
 
-  // ===== FORUM STATE =====
   const [topics, setTopics] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  // ===== LOAD DATA =====
+  // ================= LOAD TOPICS =================
   const loadTopics = () => {
-    fetch("https://duannghiencuusinhvien.onrender.com/posts")
+    fetch(`${BASE_URL}/api/topics`)
       .then((res) => res.json())
-      .then((data) => setTopics(data));
+      .then((data) => setTopics(data))
+      .catch((err) => console.error("Load error:", err));
   };
 
-  // ===== CREATE =====
-  const createTopic = async () => {
-    await fetch("https://duannghiencuusinhvien.onrender.com/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, content }),
-    });
-
-    setTitle("");
-    setContent("");
+  useEffect(() => {
     loadTopics();
+  }, []);
+
+  // ================= CREATE TOPIC =================
+  const createTopic = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/topics`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, content }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Create failed");
+      }
+
+      setTitle("");
+      setContent("");
+      loadTopics();
+    } catch (err) {
+      console.error("❌ Create error:", err.message);
+      alert(err.message);
+    }
   };
 
-  // ===== VOTE =====
+  // ================= VOTE =================
   const vote = async (id, type) => {
-    await fetch(
-      "https://duannghiencuusinhvien.onrender.com/api/topics/" + id + "/vote",
-      {
+    try {
+      await fetch(`${BASE_URL}/api/topics/${id}/vote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ type }),
-      },
-    );
+      });
 
-    loadTopics();
+      loadTopics();
+    } catch (err) {
+      console.error("Vote error:", err);
+    }
   };
 
-  // ===== DELETE =====
+  // ================= DELETE =================
   const deleteTopic = async (id) => {
-    await fetch("https://duannghiencuusinhvien.onrender.com/api/topics/" + id, {
-      method: "DELETE",
-    });
+    try {
+      await fetch(`${BASE_URL}/api/topics/${id}`, {
+        method: "DELETE",
+      });
 
-    loadTopics();
+      loadTopics();
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   return (
     <div>
-      {/* ================= BẢNG TIN ================= */}
+      {/* ================= BẢN TIN ================= */}
       <div className="news-section">
         <h2 className="section-title">BẢN TIN</h2>
 
         <div className="news-grid">
           <div className="news-big" onClick={() => navigate("/news/1")}>
             <img src={process.env.PUBLIC_URL + "/anh1.png"} />
-            <div className="news-card-title">
-              NGHIÊN CỨU KHOA HỌC SINH VIÊN – KHOA QUẢN TRỊ NHÂN LỰC
-            </div>
-          </div>
-
-          <div className="news-small" onClick={() => navigate("/news/2")}>
-            <img src={process.env.PUBLIC_URL + "/anh2.png"} />
-            <p>BẢO VỆ ĐỀ TÀI NGHIÊN CỨU KHOA HỌC</p>
-          </div>
-
-          <div className="news-small" onClick={() => navigate("/news/3")}>
-            <img src={process.env.PUBLIC_URL + "/anh3.png"} />
-            <p>NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHÔNG CHỈ LÀ MỘT BUỔI BẢO VỆ </p>
-          </div>
-
-          <div className="news-small" onClick={() => navigate("/news/4")}>
-            <img src={process.env.PUBLIC_URL + "/anh4.png"} />
-            <p>
-              NGHIÊN CỨU KHOA HỌC SINH VIÊN - KHẲNG ĐỊNH TRI THỨC, CHẮP CÁNH TƯ
-              DUY KINH TẾ TRẺ
-            </p>
+            <div className="news-card-title">NGHIÊN CỨU KHOA HỌC SINH VIÊN</div>
           </div>
         </div>
       </div>
 
-      {/* ================= DIỄN ĐÀN ================= */}
+      {/* ================= FORUM ================= */}
       <div className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-6xl mx-auto grid grid-cols-4 gap-6">
           {/* LEFT */}
@@ -99,8 +101,6 @@ function Home() {
 
             {/* CREATE */}
             <div className="bg-white shadow rounded p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4">Tạo chủ đề</h2>
-
               <input
                 className="border w-full p-2 mb-3 rounded"
                 placeholder="Tiêu đề"
@@ -124,29 +124,23 @@ function Home() {
             </div>
 
             {/* LIST */}
-            <h2 className="text-xl font-semibold mb-4">Danh sách bài viết</h2>
-
             {topics.map((topic) => (
               <div
                 key={topic.id}
-                className="bg-white border rounded-lg p-4 mb-4 flex hover:shadow-lg transition"
+                className="bg-white border rounded-lg p-4 mb-4 flex"
               >
                 {/* VOTE */}
                 <div className="flex flex-col items-center mr-4">
                   <button onClick={() => vote(topic.id, "up")}>⬆</button>
-
                   <span>{topic.votes || 0}</span>
-
                   <button onClick={() => vote(topic.id, "down")}>⬇</button>
                 </div>
 
                 {/* CONTENT */}
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <Link to={"/topic/" + topic.id}>
-                      <h3 className="font-bold text-blue-600 hover:underline">
-                        {topic.title}
-                      </h3>
+                    <Link to={`/topic/${topic.id}`}>
+                      <h3 className="font-bold text-blue-600">{topic.title}</h3>
                     </Link>
 
                     <button
@@ -163,15 +157,13 @@ function Home() {
             ))}
           </div>
 
-          {/* RIGHT SIDEBAR */}
+          {/* RIGHT */}
           <div className="bg-white p-4 rounded shadow h-fit">
             <h2 className="text-lg font-bold mb-4">Thông tin</h2>
-
-            <p className="text-gray-600 text-sm mb-3">
+            <p className="text-gray-600 text-sm">
               Nơi trao đổi nghiên cứu khoa học.
             </p>
-
-            <div className="text-sm">Tổng bài viết: {topics.length}</div>
+            <div className="text-sm mt-3">Tổng bài viết: {topics.length}</div>
           </div>
         </div>
       </div>
