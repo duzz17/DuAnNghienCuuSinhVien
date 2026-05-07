@@ -25,6 +25,11 @@ async function createTables() {
       );
     `);
 
+    await pool.query(`
+      ALTER TABLE posts
+      ADD COLUMN IF NOT EXISTS votes INT DEFAULT 0;
+    `);
+
     console.log("✅ Tables ready");
   } catch (err) {
     console.error("❌ Table error:", err.message);
