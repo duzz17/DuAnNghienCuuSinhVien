@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import "./TopicPage.css";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL =
+  process.env.REACT_APP_API_URL || "https://duannghiencuusinhvien.onrender.com";
 
 function TopicPage() {
   const { id } = useParams();
