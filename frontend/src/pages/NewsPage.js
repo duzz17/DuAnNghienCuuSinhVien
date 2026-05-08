@@ -1,11 +1,45 @@
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./PageStyle.css";
+import UploadDocument from "../components/UploadDocument";
 
 function NewsPage() {
   const location = useLocation();
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   let title = "Tin tức";
   let newsList = [];
+
+  const category = location.pathname.includes("events")
+    ? "news-events"
+    : location.pathname.includes("seminars")
+      ? "news-seminars"
+      : location.pathname.includes("talks")
+        ? "news-talks"
+        : "news";
+
+  useEffect(() => {
+    const raw = localStorage.getItem(`uploadedDocs_${category}`);
+    if (raw) {
+      try {
+        setUploadedFiles(JSON.parse(raw));
+      } catch (error) {
+        setUploadedFiles([]);
+      }
+    } else {
+      setUploadedFiles([]);
+    }
+  }, [category]);
+
+  const saveUploadedFiles = (items) => {
+    localStorage.setItem(`uploadedDocs_${category}`, JSON.stringify(items));
+  };
+
+  const handleUploadedFiles = (newFiles) => {
+    const merged = [...newFiles, ...uploadedFiles];
+    setUploadedFiles(merged);
+    saveUploadedFiles(merged);
+  };
 
   // 🔥 SỰ KIỆN
   if (location.pathname.includes("events")) {
@@ -77,32 +111,73 @@ function NewsPage() {
     ];
   }
 
+  const uploadsTitle =
+    category === "news-events"
+      ? "Đăng tài liệu Sự kiện"
+      : category === "news-seminars"
+        ? "Đăng tài liệu Hội thảo"
+        : category === "news-talks"
+          ? "Đăng tài liệu Tọa đàm"
+          : "Đăng tài liệu Tin tức";
+
+  const downloadsTitle =
+    category === "news-events"
+      ? "Tài liệu Sự kiện"
+      : category === "news-seminars"
+        ? "Tài liệu Hội thảo"
+        : category === "news-talks"
+          ? "Tài liệu Tọa đàm"
+          : "Danh sách Tin tức";
+
+  const combinedFiles = [...uploadedFiles, ...newsList];
+
+  const getPreviewUrl = (fileUrl) => {
+    if (fileUrl.startsWith("data:")) {
+      return fileUrl;
+    }
+    return window.location.origin + fileUrl;
+  };
+
   return (
     <div className="page-container">
       <h1 className="page-title">{title}</h1>
 
+      <UploadDocument
+        category={category}
+        title={uploadsTitle}
+        onUpload={handleUploadedFiles}
+      />
+
+      <div className="doc-list-header">
+        <h2 className="downloads-title">{downloadsTitle}</h2>
+      </div>
+
       <div className="card-grid">
-        {newsList.map((item, index) => (
-          <div key={index} className="card">
-            <h3>{item.title}</h3>
+        {combinedFiles.map((item, index) => {
+          const fileUrl = item.url || item.file;
+          const fileName = item.name || item.title;
 
-            {/* 🔥 NÚT TẢI */}
-            <div className="card-actions">
-              <a
-                href={item.file}
-                target="_blank"
-                rel="noreferrer"
-                className="btn preview-btn"
-              >
-                Xem trước
-              </a>
+          return (
+            <div key={index} className="card">
+              <h3>{fileName}</h3>
 
-              <a href={item.file} download className="btn">
-              ⬇ Tải tài liệu
-              </a>
+              <div className="card-actions">
+                <a
+                  href={getPreviewUrl(fileUrl)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn preview-btn"
+                >
+                  Xem trước
+                </a>
+
+                <a href={fileUrl} download className="btn">
+                  ⬇ Tải tài liệu
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

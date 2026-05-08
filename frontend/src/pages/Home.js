@@ -1,10 +1,12 @@
-﻿import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+﻿// eslint-disable-next-line unicode-bom
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const BASE_URL = "http://localhost:3000";
 
 function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [topics, setTopics] = useState([]);
   const [title, setTitle] = useState("");
@@ -21,6 +23,15 @@ function Home() {
   useEffect(() => {
     loadTopics();
   }, []);
+
+  useEffect(() => {
+    if (location.search.includes("scroll=forum")) {
+      const forumSection = document.getElementById("forum-section");
+      if (forumSection) {
+        forumSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location.search]);
 
   // ================= CREATE TOPIC =================
   const createTopic = async () => {
@@ -125,7 +136,7 @@ function Home() {
       </div>
 
       {/* ================= FORUM ================= */}
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div id="forum-section" className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-6xl mx-auto grid grid-cols-4 gap-6">
           {/* LEFT */}
           <div className="col-span-3">
@@ -189,13 +200,12 @@ function Home() {
             ))}
           </div>
 
-          {/* RIGHT */}
-          <div className="bg-white p-4 rounded shadow h-fit">
-            <h2 className="text-lg font-bold mb-4">Thông tin</h2>
-            <p className="text-gray-600 text-sm">
-              Nơi trao đổi nghiên cứu khoa học.
-            </p>
-            <div className="text-sm mt-3">Tổng bài viết: {topics.length}</div>
+          {/* RIGHT SIDEBAR */}
+          <div className="col-span-1">
+            <div className="bg-white shadow rounded p-4">
+              <h3 className="font-bold mb-4">Thống kê</h3>
+              <p>Tổng số bài viết: {topics.length}</p>
+            </div>
           </div>
         </div>
       </div>

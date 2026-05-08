@@ -80,9 +80,9 @@ function Navbar() {
         <div className="menu-item">
           DIỄN ĐÀN TRAO ĐỔI
           <div className="dropdown">
-            <Link to="/forum/questions">Đặt câu hỏi</Link>
-            <Link to="/forum/discussion">Thảo luận</Link>
-            <Link to="/forum/feedback">Góp ý</Link>
+            <Link to="/?scroll=forum">Đặt câu hỏi</Link>
+            <Link to="/?scroll=forum">Thảo luận</Link>
+            <Link to="/?scroll=forum">Góp ý</Link>
           </div>
         </div>
       </div>

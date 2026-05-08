@@ -1,11 +1,45 @@
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./Documents.css";
+import UploadDocument from "../components/UploadDocument";
 
 function DocumentsPage() {
   const location = useLocation();
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   let title = "Kho tài liệu";
   let files = [];
+
+  const category = location.pathname.includes("research")
+    ? "research"
+    : location.pathname.includes("thesis")
+      ? "thesis"
+      : location.pathname.includes("books")
+        ? "books"
+        : "all";
+
+  useEffect(() => {
+    const raw = localStorage.getItem(`uploadedDocs_${category}`);
+    if (raw) {
+      try {
+        setUploadedFiles(JSON.parse(raw));
+      } catch (error) {
+        setUploadedFiles([]);
+      }
+    } else {
+      setUploadedFiles([]);
+    }
+  }, [category]);
+
+  const saveUploadedFiles = (items) => {
+    localStorage.setItem(`uploadedDocs_${category}`, JSON.stringify(items));
+  };
+
+  const handleUploadedFiles = (newFiles) => {
+    const merged = [...newFiles, ...uploadedFiles];
+    setUploadedFiles(merged);
+    saveUploadedFiles(merged);
+  };
 
   // 🔥 BÀI NCKH
   if (location.pathname.includes("research")) {
@@ -96,42 +130,84 @@ function DocumentsPage() {
     ];
   }
 
-  const getIcon = (type) => {
+  const getIcon = (type, fileUrl) => {
     if (type === "pdf") return "📕";
     if (type === "word") return "📘";
-    return "📄";
+    if (fileUrl?.toLowerCase().endsWith(".pdf")) return "📕";
+    return "📘";
   };
+
+  const getPreviewUrl = (fileUrl) => {
+    if (fileUrl.startsWith("data:")) {
+      return fileUrl;
+    }
+    return window.location.origin + fileUrl;
+  };
+
+  const uploadTitle =
+    category === "research"
+      ? "Đăng bài NCKH mới"
+      : category === "thesis"
+        ? "Đăng luận văn mới"
+        : category === "books"
+          ? "Đăng giáo trình mới"
+          : "Đăng tài liệu mới";
+
+  const downloadsTitle =
+    category === "research"
+      ? "Tài liệu Bài NCKH"
+      : category === "thesis"
+        ? "Tài liệu Luận văn"
+        : category === "books"
+          ? "Tài liệu Giáo trình"
+          : "Danh sách tài liệu";
+
+  const combinedFiles = [...uploadedFiles, ...files];
 
   return (
     <div className="doc-container">
       <h1 className="doc-title">{title}</h1>
 
-      <div className="doc-grid">
-        {files.map((file, index) => (
-          <div key={index} className="doc-card">
-            <div className="doc-icon">{getIcon(file.type)}</div>
+      <UploadDocument
+        category={category}
+        title={uploadTitle}
+        onUpload={handleUploadedFiles}
+      />
 
-            <div className="doc-info">
-              <p className="doc-name">{file.name}</p>
-            </div>
-
-            <div className="doc-actions">
-              <a
-                href={file.url}
-                target="_blank"
-                rel="noreferrer"
-                className="doc-btn doc-preview-btn"
-              >
-                Xem trước
-              </a>
-
-              <a href={file.url} download className="doc-btn">
-              ⬇ Tải xuống
-              </a>
-            </div>
-          </div>
-        ))}
+      <div className="doc-list-header">
+        <h2 className="downloads-title">{downloadsTitle}</h2>
       </div>
+
+      {combinedFiles.length === 0 ? (
+        <p className="doc-empty">Chưa có tài liệu nào trong mục này.</p>
+      ) : (
+        <div className="doc-grid">
+          {combinedFiles.map((file, index) => (
+            <div key={index} className="doc-card">
+              <div className="doc-icon">{getIcon(file.type, file.url)}</div>
+
+              <div className="doc-info">
+                <p className="doc-name">{file.name}</p>
+              </div>
+
+              <div className="doc-actions">
+                <a
+                  href={getPreviewUrl(file.url)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="doc-btn doc-preview-btn"
+                >
+                  Xem trước
+                </a>
+
+                <a href={file.url} download className="doc-btn">
+                  ⬇ Tải xuống
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

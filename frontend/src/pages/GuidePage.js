@@ -1,11 +1,53 @@
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./PageStyle.css";
+import UploadDocument from "../components/UploadDocument";
 
 function GuidePage() {
   const location = useLocation();
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   let title = "Hướng dẫn";
   let guides = [];
+
+  const category = location.pathname.includes("process")
+    ? "guide-process"
+    : location.pathname.includes("topic")
+      ? "guide-topic"
+      : location.pathname.includes("writing")
+        ? "guide-writing"
+        : "guide";
+
+  useEffect(() => {
+    const raw = localStorage.getItem(`uploadedDocs_${category}`);
+    if (raw) {
+      try {
+        setUploadedFiles(JSON.parse(raw));
+      } catch (error) {
+        setUploadedFiles([]);
+      }
+    } else {
+      setUploadedFiles([]);
+    }
+  }, [category]);
+
+  const saveUploadedFiles = (items) => {
+    localStorage.setItem(`uploadedDocs_${category}`, JSON.stringify(items));
+  };
+
+  const handleUploadedFiles = (newFiles) => {
+    const merged = [...newFiles, ...uploadedFiles];
+    setUploadedFiles(merged);
+    saveUploadedFiles(merged);
+  };
+
+  // 🔥 ICON
+  const getIcon = (type, fileUrl) => {
+    if (type === "pdf") return "📕";
+    if (type === "word") return "📘";
+    if (fileUrl?.toLowerCase().endsWith(".pdf")) return "📕";
+    return "📘";
+  };
 
   // 🔥 QUY TRÌNH
   if (location.pathname.includes("process")) {
@@ -101,40 +143,80 @@ function GuidePage() {
     ];
   }
 
-  // 🔥 ICON
-  const getIcon = (type) => {
-    if (type === "pdf") return "📕";
-    if (type === "word") return "📘";
-    return "📄";
+  const getPreviewUrl = (fileUrl) => {
+    if (fileUrl.startsWith("data:")) {
+      return fileUrl;
+    }
+    return window.location.origin + fileUrl;
   };
+
+  const uploadsTitle =
+    category === "guide-process"
+      ? "Đăng tài liệu Quy trình"
+      : category === "guide-topic"
+        ? "Đăng tài liệu Cách chọn đề tài"
+        : category === "guide-writing"
+          ? "Đăng tài liệu Cách viết"
+          : "Đăng tài liệu Hướng dẫn";
+
+  const downloadsTitle =
+    category === "guide-process"
+      ? "Tài liệu Quy trình"
+      : category === "guide-topic"
+        ? "Tài liệu Cách chọn đề tài"
+        : category === "guide-writing"
+          ? "Tài liệu Cách viết"
+          : "Danh sách Hướng dẫn";
+
+  const combinedGuides = [...uploadedFiles, ...guides];
 
   return (
     <div className="page-container">
       <h1 className="page-title">{title}</h1>
 
+      <UploadDocument
+        category={category}
+        title={uploadsTitle}
+        onUpload={handleUploadedFiles}
+      />
+
+      <div className="doc-list-header">
+        <h2 className="downloads-title">{downloadsTitle}</h2>
+      </div>
+
       <div className="card-grid">
-        {guides.map((file, index) => (
-          <div key={index} className="card">
-            <div style={{ fontSize: "30px" }}>{getIcon(file.type)}</div>
+        {combinedGuides.map((file, index) => {
+          const fileUrl = file.url || file.file;
+          const fileName = file.name || file.title;
+          const fileType =
+            file.type ||
+            (fileUrl?.toLowerCase().endsWith(".pdf") ? "pdf" : "word");
 
-            <p>{file.name}</p>
+          return (
+            <div key={index} className="card">
+              <div style={{ fontSize: "30px" }}>
+                {getIcon(fileType, fileUrl)}
+              </div>
 
-            <div className="card-actions">
-              <a
-                href={file.url}
-                target="_blank"
-                rel="noreferrer"
-                className="btn preview-btn"
-              >
-                Xem trước
-              </a>
+              <p>{fileName}</p>
 
-              <a href={file.url} download className="btn">
-              ⬇ Tải tài liệu
-              </a>
+              <div className="card-actions">
+                <a
+                  href={getPreviewUrl(fileUrl)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn preview-btn"
+                >
+                  Xem trước
+                </a>
+
+                <a href={fileUrl} download className="btn">
+                  ⬇ Tải tài liệu
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

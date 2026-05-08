@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import "./TopicPage.css";
 
@@ -13,16 +13,16 @@ function TopicPage() {
   const [replyContent, setReplyContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const loadComments = () => {
+  const loadComments = useCallback(() => {
     fetch(`${BASE_URL}/api/comments/${id}`)
       .then((res) => res.json())
       .then((data) => setComments(Array.isArray(data) ? data : []))
       .catch((err) => console.error("Load comments error:", err));
-  };
+  }, [id]);
 
   useEffect(() => {
     loadComments();
-  }, [id]);
+  }, [id, loadComments]);
 
   const createComment = async (parentId = null) => {
     const text = parentId ? replyContent : content;

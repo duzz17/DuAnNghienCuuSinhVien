@@ -11,6 +11,69 @@
   color: #1e293b;
 }
 
+.upload-panel {
+  background: white;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.upload-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #0f172a;
+}
+
+.upload-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.upload-help,
+.upload-success,
+.upload-error {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.upload-help {
+  color: #475569;
+}
+
+.doc-list-header {
+  margin-bottom: 18px;
+}
+
+.downloads-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.upload-success {
+  color: #0f766e;
+}
+
+.upload-error {
+  color: #b91c1c;
+}
+
+.doc-empty {
+  font-size: 16px;
+  color: #475569;
+  padding: 24px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
 .doc-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

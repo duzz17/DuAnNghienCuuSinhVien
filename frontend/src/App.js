@@ -4,12 +4,9 @@ import TopicPage from "./pages/TopicPage";
 import "./App.css";
 import { useState, useEffect } from "react";
 import NewsDetail from "./pages/NewsDetail";
-import { Link } from "react-router-dom";
 import NewsPage from "./pages/NewsPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import GuidePage from "./pages/GuidePage";
-import ForumPage from "./pages/ForumPage";
-import filesData from "./data/filesData"; //
 import Navbar from "./components/Navbar";
 function App() {
   // 🔥 DANH SÁCH ẢNH
@@ -29,7 +26,7 @@ function App() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   // 🔥 NÚT TRÁI
   const prevSlide = () => {
