@@ -15,9 +15,9 @@ function runOut(cmd, opts = {}) {
   }).trim();
 }
 
-const root = path.resolve(__dirname, "..");
-const buildDir = path.join(root, "build");
-const tempDir = path.join(root, ".gh-pages-temp");
+const root = path.resolve(__dirname, "..", "..");
+const buildDir = path.join(root, "frontend", "build");
+const tempDir = path.join(root, "frontend", ".gh-pages-temp");
 
 function rmDir(dir) {
   if (fs.existsSync(dir)) {
